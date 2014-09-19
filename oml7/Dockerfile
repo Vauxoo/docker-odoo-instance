@@ -1,4 +1,4 @@
-FROM docker pull quay.io/ruiztulio/odoo-base-image
+FROM quay.io/ruiztulio/odoo-base-image
 MAINTAINER Tulio Ruiz <tulio@vauxoo.com>
 RUN adduser --home=/home/odoo --disabled-password --gecos "" --shell=/bin/bash odoo
 
