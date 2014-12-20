@@ -3,14 +3,19 @@ MAINTAINER Leonardo Astros <leonardo@vauxoo.com>
 RUN adduser --home=/home/runbot --disabled-password --gecos "" --shell=/bin/bash runbot
 
 RUN echo 'root:runbot' |chpasswd
-
+RUN mkdir /home/runbot/.ssh
+ADD id_rsa /home/runbot/.ssh/id_rsa
+RUN chown runbot:runbot -R /home/runbot \
+    && chmod 600 /home/runbot/.ssh/id_rsa
+ADD files/supervisord.conf /etc/supervisor/conf.d/supervisord.conf
 USER runbot
+ENV HOME /home/odoo
 RUN /bin/bash -c "mkdir -p /home/runbot/instance/{config,extra_addons}"
 RUN cd /home/runbot/instance && git clone -b 8.0 https://github.com/odoo/odoo.git odoo
 RUN cd /home/runbot/instance/extra_addons \
-    && git clone -b 8.0-vauxoo https://github.com/Vauxoo/runbot-addons.git \
-    && git clone -b 8.0-vauxoo https://github.com/Vauxoo/odoo-extra.git \
-    && git clone -b master https://github.com/Vauxoo/panama-dv.git
+    && git clone -b 8.0-vauxoo --depth=1 --single-branch https://github.com/Vauxoo/runbot-addons.git \
+    && git clone -b 8.0-vauxoo --depth=1 --single-branch https://github.com/Vauxoo/odoo-extra.git \
+    && git clone -b master --depth=1 --single-branch https://github.com/Vauxoo/panama-dv.git
 
 ADD files/odoo.conf /home/runbot/instance/config/
 ADD files/supervisord.conf /etc/supervisor/conf.d/supervisord.conf
@@ -21,10 +26,10 @@ USER root
 RUN mkdir /external_files
 ADD files/odoo.conf /external_files/odoo.conf
 ADD files/supervisord.conf /external_files/supervisord.conf
-ADD files/entry_point.py /entry_point.py
-RUN chmod +x /entry_point.py
 RUN mkdir -p /var/log/supervisor
 VOLUME ["/var/log/supervisor", "/home/runbot/instance/odoo/openerp/filestore"]
+RUN wget -O /entry_point.py https://raw.githubusercontent.com/Vauxoo/docker_entrypoint/master/entry_point.py \
+    && chmod +x /entry_point.py
 
 EXPOSE 8069
-CMD ["/entry_point.py"]
+CMD /entry_point.py
