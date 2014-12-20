@@ -1,4 +1,4 @@
-FROM quay.io/ruiztulio/odoo-base-image
+FROM vauxoo/odoo-80-image
 MAINTAINER Leonardo Astros <leonardo@vauxoo.com>
 RUN adduser --home=/home/runbot --disabled-password --gecos "" --shell=/bin/bash runbot
 
