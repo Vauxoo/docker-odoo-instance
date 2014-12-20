@@ -8,7 +8,7 @@ USER runbot
 RUN /bin/bash -c "mkdir -p /home/runbot/instance/{config,extra_addons}"
 RUN cd /home/runbot/instance && git clone -b 8.0 https://github.com/odoo/odoo.git odoo
 RUN cd /home/runbot/instance/extra_addons \
-    && git clone -b 8.0 https://github.com/Vauxoo/runbot-addons.git \
+    && git clone -b 8.0-vauxoo https://github.com/Vauxoo/runbot-addons.git \
     && git clone -b 8.0-vauxoo https://github.com/Vauxoo/odoo-extra.git \
     && git clone -b master https://github.com/Vauxoo/panama-dv.git
 
