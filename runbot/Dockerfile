@@ -10,6 +10,7 @@ RUN chown runbot:runbot -R /home/runbot \
 ADD files/supervisord.conf /etc/supervisor/conf.d/supervisord.conf
 USER runbot
 ENV HOME /home/runbot
+ENV ODOO_USER runbot
 ENV ODOO_CONFIG_FILE /home/runbot/.openerp_serverrc
 ENV ODOO_FILESTORE_PATH /home/runbot/.local/share/Odoo/filestore 
 RUN /bin/bash -c "mkdir -p /home/runbot/instance/{config,extra_addons}"
