@@ -17,7 +17,7 @@ RUN cd /home/runbot/instance/extra_addons \
     && git clone -b 8.0-vauxoo --depth=1 --single-branch https://github.com/Vauxoo/odoo-extra.git \
     && git clone -b master --depth=1 --single-branch https://github.com/Vauxoo/panama-dv.git
 
-ADD files/openerp_serverrc /home/runbot/instance/config/
+ADD files/openerp_serverrc /home/runbot/.openerp_serverrc
 ADD files/supervisord.conf /etc/supervisor/conf.d/supervisord.conf
 RUN mkdir -p /home/runbot/.local/share
 ENV XDG_DATA_HOME /home/runbot/.local/share
