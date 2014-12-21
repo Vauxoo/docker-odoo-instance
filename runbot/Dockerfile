@@ -9,7 +9,9 @@ RUN chown runbot:runbot -R /home/runbot \
     && chmod 600 /home/runbot/.ssh/id_rsa
 ADD files/supervisord.conf /etc/supervisor/conf.d/supervisord.conf
 USER runbot
-ENV HOME /home/odoo
+ENV HOME /home/runbot
+ENV ODOO_CONFIG_FILE /home/runbot/.openerp_serverrc
+ENV ODOO_FILESTORE_PATH /home/runbot/.local/share/Odoo/filestore 
 RUN /bin/bash -c "mkdir -p /home/runbot/instance/{config,extra_addons}"
 RUN cd /home/runbot/instance && git clone -b 8.0 https://github.com/odoo/odoo.git odoo
 RUN cd /home/runbot/instance/extra_addons \
@@ -21,6 +23,7 @@ ADD files/openerp_serverrc /home/runbot/.openerp_serverrc
 ADD files/supervisord.conf /etc/supervisor/conf.d/supervisord.conf
 RUN mkdir -p /home/runbot/.local/share
 ENV XDG_DATA_HOME /home/runbot/.local/share
+ENV PYTHONPATH $PYTHONPATH:/home/runbot/instance/extra_addons/panama-dv-lib
 
 USER root
 RUN mkdir /external_files
