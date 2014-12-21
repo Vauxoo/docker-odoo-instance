@@ -17,17 +17,17 @@ RUN cd /home/runbot/instance/extra_addons \
     && git clone -b 8.0-vauxoo --depth=1 --single-branch https://github.com/Vauxoo/odoo-extra.git \
     && git clone -b master --depth=1 --single-branch https://github.com/Vauxoo/panama-dv.git
 
-ADD files/odoo.conf /home/runbot/instance/config/
+ADD files/openerp_serverrc /home/runbot/instance/config/
 ADD files/supervisord.conf /etc/supervisor/conf.d/supervisord.conf
 RUN mkdir -p /home/runbot/.local/share
 ENV XDG_DATA_HOME /home/runbot/.local/share
 
 USER root
 RUN mkdir /external_files
-ADD files/odoo.conf /external_files/odoo.conf
+ADD files/openerp_serverrc /external_files/openerp_serverrc
 ADD files/supervisord.conf /external_files/supervisord.conf
 RUN mkdir -p /var/log/supervisor
-VOLUME ["/var/log/supervisor", "/home/runbot/instance/odoo/openerp/filestore"]
+VOLUME ["/var/log/supervisor", "/home/odoo/.local/share/Odoo/filestore"]
 RUN wget -O /entry_point.py https://raw.githubusercontent.com/Vauxoo/docker_entrypoint/master/entry_point.py \
     && chmod +x /entry_point.py
 
