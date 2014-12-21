@@ -23,7 +23,7 @@ ADD files/openerp_serverrc /home/runbot/.openerp_serverrc
 ADD files/supervisord.conf /etc/supervisor/conf.d/supervisord.conf
 RUN mkdir -p /home/runbot/.local/share
 ENV XDG_DATA_HOME /home/runbot/.local/share
-ENV PYTHONPATH $PYTHONPATH:/home/runbot/instance/extra_addons/panama-dv-lib
+ENV PYTHONPATH $PYTHONPATH:/home/runbot/instance/extra_addons/panama-dv
 
 USER root
 RUN mkdir /external_files
