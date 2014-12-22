@@ -15,7 +15,8 @@ ENV ODOO_CONFIG_FILE /home/runbot/.openerp_serverrc
 ENV ODOO_FILESTORE_PATH /home/runbot/.local/share/Odoo/filestore 
 RUN ssh-keyscan github.com > /home/runbot/.ssh/known_hosts \
     && ssh-keyscan launchpad.net >> /home/runbot/.ssh/known_hosts \
-    && ssh-keyscan bitbucket.org >> /home/runbot/.ssh/known_hosts
+    && ssh-keyscan bitbucket.org >> /home/runbot/.ssh/known_hosts \
+    && ssh-keyscan gitlab.com >> /home/runbot/.ssh/known_hosts
 RUN /bin/bash -c "mkdir -p /home/runbot/instance/{config,extra_addons}"
 RUN cd /home/runbot/instance && git clone -b 8.0 https://github.com/odoo/odoo.git odoo
 RUN cd /home/runbot/instance/extra_addons \
