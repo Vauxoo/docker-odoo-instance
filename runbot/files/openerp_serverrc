@@ -6,3 +6,4 @@ db_user = runbot
 db_password = runbot
 template = template1
 addons_path=/home/runbot/instance/odoo/addons,/home/runbot/instance/extra_addons/runbot-addons,/home/runbot/instance/extra_addons/odoo-extra
+without_demo = False
