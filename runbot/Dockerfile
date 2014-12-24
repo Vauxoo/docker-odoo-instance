@@ -5,8 +5,7 @@ RUN adduser --home=/home/runbot --disabled-password --gecos "" --shell=/bin/bash
 RUN apt-get update && apt-get install nginx python-matplotlib -q
 RUN echo 'root:runbot' |chpasswd
 RUN mkdir /home/runbot/.ssh
-RUN chown runbot:runbot -R /home/runbot \
-    && chmod 600 /home/runbot/.ssh/id_rsa
+RUN chown runbot:runbot -R /home/runbot
 ADD files/supervisord.conf /etc/supervisor/conf.d/supervisord.conf
 USER runbot
 ENV HOME /home/runbot
