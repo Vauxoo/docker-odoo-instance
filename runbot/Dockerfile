@@ -2,7 +2,7 @@ FROM vauxoo/odoo-80-image
 MAINTAINER Leonardo Astros <leonardo@vauxoo.com>
 RUN adduser --home=/home/runbot --disabled-password --gecos "" --shell=/bin/bash runbot
 
-RUN apt-get update && apt-get install nginx -q
+RUN apt-get update && apt-get install nginx python-matplotlib -q
 RUN echo 'root:runbot' |chpasswd
 RUN mkdir /home/runbot/.ssh
 ADD id_rsa /home/runbot/.ssh/id_rsa
@@ -35,7 +35,6 @@ USER root
 RUN mkdir /external_files
 ADD files/openerp_serverrc /external_files/openerp_serverrc
 ADD files/supervisord.conf /external_files/supervisord.conf
-RUN echo 'odoorunbot.vauxoo.com' > /etc/hostname
 RUN mkdir -p /var/log/supervisor
 VOLUME ["/var/log/supervisor", "/home/odoo/.local/share/Odoo/filestore"]
 RUN wget -O /entry_point.py https://raw.githubusercontent.com/Vauxoo/docker_entrypoint/master/entry_point.py \
