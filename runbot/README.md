@@ -20,6 +20,6 @@ Where:
 
 You can add additional env vars to configure Odoo instance::
 
-    docker run -e "DB_HOST=your_db_host DB_USER=the_user DB_PASSWORD=the_user_password ADMIN_PASSWD=the_admin_pass" -v path_to_sshkeys:/home/runbot/.ssh -t runbot
+    docker run -e "DB_HOST=your_db_host" -e "DB_USER=the_user" -e "DB_PASSWORD=the_user_password" -e "ADMIN_PASSWD=the_admin_pass" -v path_to_sshkeys:/home/runbot/.ssh -t runbot
 
 And any other parameter defined in the Odoo config file, you must type it in uppercase if you want the entry point detect it.
