@@ -1,0 +1,10 @@
+runbot_image_name: vauxoodeveloper/docker-odoo-instance:dev-leo
+runbot_name: runbot-vauxoo-com
+runbot_hostname: runbot.vauxoo.com
+
+odoo_mapped_port: 8069
+nginx_mapped_port: 8080
+
+db_server: "172.17.42.1"
+db_filter: runbotdb
+db_name: runbotdb
