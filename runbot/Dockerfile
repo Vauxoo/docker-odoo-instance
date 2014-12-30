@@ -38,7 +38,7 @@ VOLUME ["/var/log/supervisor", "/home/runbot/.local/share/Odoo/filestore", "/hom
 RUN wget -O /entry_point.py https://raw.githubusercontent.com/Vauxoo/docker_entrypoint/master/entry_point.py \
     && chmod +x /entry_point.py
 
-EXPOSE 8069
+EXPOSE 8072
 EXPOSE 8080
 
 CMD /entry_point.py
