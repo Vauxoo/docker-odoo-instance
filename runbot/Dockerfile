@@ -7,6 +7,7 @@ RUN echo 'root:runbot' |chpasswd
 RUN mkdir /home/runbot/.ssh
 RUN chown runbot:runbot -R /home/runbot
 ADD files/supervisord.conf /etc/supervisor/conf.d/supervisord.conf
+RUN ln -s /usr/sbin/nginx /usr/bin/nginx
 USER runbot
 ENV HOME /home/runbot
 ENV ODOO_USER runbot
