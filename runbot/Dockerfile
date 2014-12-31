@@ -33,6 +33,7 @@ ENV XDG_DATA_HOME /home/runbot/.local/share
 ENV PYTHONPATH $PYTHONPATH:/home/runbot/instance/extra_addons/panama-dv
 
 USER root
+RUN ln -s /runbot/instance/extra_addons/odoo-extra/runbot/static/repo_local /runbot_repo_local
 RUN mkdir /external_files
 ADD files/openerp_serverrc /external_files/openerp_serverrc
 ADD files/supervisord.conf /external_files/supervisord.conf
