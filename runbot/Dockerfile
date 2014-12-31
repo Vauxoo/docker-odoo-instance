@@ -18,7 +18,7 @@ RUN ssh-keyscan github.com > /home/runbot/.ssh/known_hosts \
     && ssh-keyscan bitbucket.org >> /home/runbot/.ssh/known_hosts \
     && ssh-keyscan gitlab.com >> /home/runbot/.ssh/known_hosts
 RUN git config --global user.email "runbot@vauxoo.com"
-RUN git config --global config user.name "Runbot Vauxoo"
+RUN git config --global user.name "Runbot Vauxoo"
 RUN /bin/bash -c "mkdir -p /home/runbot/instance/{config,extra_addons}"
 RUN cd /home/runbot/instance && git clone -b 8.0 https://github.com/odoo/odoo.git odoo
 RUN cd /home/runbot/instance/extra_addons \
@@ -33,7 +33,7 @@ ENV XDG_DATA_HOME /home/runbot/.local/share
 ENV PYTHONPATH $PYTHONPATH:/home/runbot/instance/extra_addons/panama-dv
 
 USER root
-RUN ln -s /runbot/instance/extra_addons/odoo-extra/runbot/static/repo_local /runbot_repo_local
+RUN ln -s /home/runbot/instance/extra_addons/odoo-extra/runbot/static/repo_local /runbot_repo_local
 RUN mkdir /external_files
 ADD files/openerp_serverrc /external_files/openerp_serverrc
 ADD files/supervisord.conf /external_files/supervisord.conf
@@ -41,7 +41,7 @@ RUN mkdir -p /var/log/supervisor
 VOLUME ["/var/log/supervisor", "/home/runbot/.local/share/Odoo/filestore", "/home/runbot/instance/extra_addons/odoo-extra/runbot/static"]
 RUN wget -O /entry_point.py https://raw.githubusercontent.com/Vauxoo/docker_entrypoint/master/entry_point.py \
     && chmod +x /entry_point.py
-
+RUN cd /home/runbot/ && git clone -b master --single-branch --depth=1 git@github.com:vauxoo-dev/gist-vauxoo.git 
 EXPOSE 8072
 EXPOSE 8080
 
