@@ -17,6 +17,8 @@ RUN ssh-keyscan github.com > /home/runbot/.ssh/known_hosts \
     && ssh-keyscan launchpad.net >> /home/runbot/.ssh/known_hosts \
     && ssh-keyscan bitbucket.org >> /home/runbot/.ssh/known_hosts \
     && ssh-keyscan gitlab.com >> /home/runbot/.ssh/known_hosts
+RUN git config --global user.email "runbot@vauxoo.com"
+RUN git config --global config user.name "Runbot Vauxoo"
 RUN /bin/bash -c "mkdir -p /home/runbot/instance/{config,extra_addons}"
 RUN cd /home/runbot/instance && git clone -b 8.0 https://github.com/odoo/odoo.git odoo
 RUN cd /home/runbot/instance/extra_addons \
