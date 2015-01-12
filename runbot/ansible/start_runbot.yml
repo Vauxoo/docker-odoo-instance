@@ -40,7 +40,7 @@
         ports: 
           - "{{ odoo_mapped_port }}:8072"
           - "{{ nginx_mapped_port }}:8080"
-        env: "DB_HOST={{ db_server }},DBFILTER={{ db_filter }},DB_NAME={{ db_name }},WITHOUT_DEMO=False"
+        env: "DB_HOST={{ db_server }},DBFILTER={{ db_filter }},DB_NAME={{ db_name }},WITHOUT_DEMO=False,ODOO_CONFIG_FILE={{ odoo_config_file }}"
         volumes:
           - "/home/runbot/.ssh:/home/runbot/.ssh" 
           - "/home/runbot/logs:/var/log/supervisor" 
