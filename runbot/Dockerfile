@@ -41,7 +41,7 @@ RUN mkdir -p /var/log/supervisor
 VOLUME ["/var/log/supervisor", "/home/runbot/.local/share/Odoo/filestore", "/home/runbot/instance/extra_addons/odoo-extra/runbot/static"]
 RUN wget -O /entry_point.py https://raw.githubusercontent.com/Vauxoo/docker_entrypoint/master/entry_point.py \
     && chmod +x /entry_point.py
-RUN cd /home/runbot/ && git clone -b master --single-branch --depth=1 git@github.com:vauxoo-dev/gist-vauxoo.git 
+RUN cd /home/runbot/ && git clone -b master --single-branch --depth=1 https://github.com/vauxoo-dev/gist-vauxoo.git
 EXPOSE 8072
 EXPOSE 8080
 
