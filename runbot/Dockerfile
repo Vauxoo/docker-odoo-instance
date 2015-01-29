@@ -11,7 +11,7 @@ RUN ln -s /usr/sbin/nginx /usr/bin/nginx
 USER runbot
 ENV HOME /home/runbot
 ENV ODOO_USER runbot
-ENV ODOO_CONFIG_FILE /home/runbot/.openerp_serverrc
+ENV ODOO_CONFIG_FILE /home/runbot/odoo_runbot.conf
 ENV ODOO_FILESTORE_PATH /home/runbot/.local/share/Odoo/filestore 
 RUN ssh-keyscan github.com > /home/runbot/.ssh/known_hosts \
     && ssh-keyscan launchpad.net >> /home/runbot/.ssh/known_hosts \
