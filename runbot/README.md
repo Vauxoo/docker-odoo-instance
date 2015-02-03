@@ -1,6 +1,10 @@
 Odoo Runbot
 ===========
 
+## Important
+
+No matter which one of these 2 methods you use, if you want to be able to access the builded instances you **must** set the host host name to be the same as the domain. If the domain for accessing the runbot is *the_runbot.my_domain.com* the host name you set in th ansible file or -h parameter in the *docker run* should be *the_runbot.my_domain.com*.
+
 ## Executing directly with docker
 
 This docker image is for Odoo runbot hacked by Vauxoo.
