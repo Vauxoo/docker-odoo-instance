@@ -4,9 +4,9 @@
 Entry point for Dockerized aplications, this works mainly with
 Odoo instances that will be launched using supervisor
 '''
-from os import stat, path, getenv
+from os import stat, path, getenv, listdir, remove
 from subprocess import call
-from shutil import copy2
+from shutil import copy2, rmtree
 import pwd
 import fileinput
 import redis
@@ -93,16 +93,17 @@ def delete_build_wo_logs(builds_path):
 
     :param str builds_path: The path to static build files
     '''
-    for build_path in os.listdir(builds_path):
-        if os.path.isdir(build_path):
-          for item in os.listdir(build_path):
-            path_item = os.path.join(build_path, item)
-            #import pdb;pdb.set_trace()
-            if os.path.isdir( path_item ):
-                if item != 'logs':
-                    shutil.rmtree( path_item )
-                elif os.path.isfile( path_item ):
-                    os.remove( path_item )
+    if path.exists(builds_path):
+        for build_path in listdir(builds_path):
+            if path.isdir(build_path):
+              for item in listdir(build_path):
+                path_item = path.join(build_path, item)
+                #import pdb;pdb.set_trace()
+                if path.isdir( path_item ):
+                    if item != 'logs':
+                        rmtree( path_item )
+                    elif path.isfile( path_item ):
+                        remove( path_item )
 
 def run_sql(sql, db_config):
     ''' Runs a SQL statement in the specified database
@@ -230,6 +231,7 @@ def main():
     change_values(CONFIGFILE_PATH, getter_func)
     bd_config = read_db_config(CONFIGFILE_PATH)
     clean_runbotbds(bd_config)
+    delete_build_wo_logs('/home/%s/instance/extra_addons/odoo-extra/runbot/static/build' % USER_NAME)
     if not path.isfile(FILESTORE_PATH):
         call(["mkdir", "-p", FILESTORE_PATH])
 
