@@ -12,7 +12,7 @@ USER runbot
 ENV HOME /home/runbot
 ENV ODOO_USER runbot
 ENV ODOO_CONFIG_FILE /home/runbot/odoo_runbot.conf
-ENV ODOO_FILESTORE_PATH /home/runbot/.local/share/Odoo/filestore 
+ENV ODOO_FILESTORE_PATH /home/runbot/.local/share/Odoo/filestore
 RUN ssh-keyscan github.com > /home/runbot/.ssh/known_hosts \
     && ssh-keyscan launchpad.net >> /home/runbot/.ssh/known_hosts \
     && ssh-keyscan bitbucket.org >> /home/runbot/.ssh/known_hosts \
@@ -33,14 +33,15 @@ ENV XDG_DATA_HOME /home/runbot/.local/share
 ENV PYTHONPATH $PYTHONPATH:/home/runbot/instance/extra_addons/panama-dv
 
 USER root
+ADD files/entry_point.py /entry_point.py
+RUN chmod +x /entry_point.py
 RUN ln -s /home/runbot/instance/extra_addons/odoo-extra/runbot/static/repo_local /runbot_repo_local
 RUN mkdir /external_files
 ADD files/odoo_runbot.conf /external_files/odoo_runbot.conf
 ADD files/supervisord.conf /external_files/supervisord.conf
 RUN mkdir -p /var/log/supervisor
 VOLUME ["/var/log/supervisor", "/home/runbot/.local/share/Odoo/filestore", "/home/runbot/instance/extra_addons/odoo-extra/runbot/static"]
-RUN wget -O /entry_point.py https://raw.githubusercontent.com/Vauxoo/docker_entrypoint/master/entry_point.py \
-    && chmod +x /entry_point.py
+
 RUN cd /home/runbot/ && git clone -b master --single-branch --depth=1 https://github.com/vauxoo-dev/gist-vauxoo.git
 EXPOSE 8072
 EXPOSE 8080
