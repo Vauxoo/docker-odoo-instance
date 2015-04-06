@@ -2,7 +2,7 @@ FROM vauxoo/odoo-80-image
 MAINTAINER Leonardo Astros <leonardo@vauxoo.com>
 RUN adduser --home=/home/runbot --disabled-password --gecos "" --shell=/bin/bash runbot
 
-RUN apt-get update && apt-get install nginx python-matplotlib python-pandas nodejs -q
+RUN apt-get update && apt-get install nginx python-matplotlib python-pandas -q
 RUN echo 'root:runbot' |chpasswd
 RUN mkdir /home/runbot/.ssh
 RUN chown runbot:runbot -R /home/runbot
