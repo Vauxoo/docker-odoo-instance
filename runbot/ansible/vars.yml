@@ -1,11 +1,18 @@
-runbot_image_name: vauxoodeveloper/docker-odoo-instance:dev-leo
-runbot_name: runbot-vauxoo-com
+runbot_image_name: runbot-vauxoo-com:stable
+runbot_name: runbot
 runbot_hostname: runbot.vauxoo.com
 
 odoo_mapped_port: 8069
+odoo_mapped_port_lp: 8072
 nginx_mapped_port: 8080
-odoo_config_file: "/home/runbot/odoo_runbot.conf"
+
+odoo_config_file: "/home/runbot/instance/config/odoo_runbot.conf"
+
 
 db_server: "172.17.42.1"
 db_filter: runbotdb
 db_name: runbotdb
+db_user: runbot
+db_password: runbot
+
+working_folder: /home/dockeradmin/runbot/data_folder
