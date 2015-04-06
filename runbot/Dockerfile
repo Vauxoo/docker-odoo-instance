@@ -2,12 +2,16 @@ FROM vauxoo/odoo-80-image
 MAINTAINER Leonardo Astros <leonardo@vauxoo.com>
 RUN adduser --home=/home/runbot --disabled-password --gecos "" --shell=/bin/bash runbot
 
-RUN apt-get update && apt-get install nginx python-matplotlib python-pandas -q
+RUN apt-get update && apt-get install nginx python-matplotlib python-pandas nodejs -q
 RUN echo 'root:runbot' |chpasswd
 RUN mkdir /home/runbot/.ssh
 RUN chown runbot:runbot -R /home/runbot
 ADD files/supervisord.conf /etc/supervisor/conf.d/supervisord.conf
 RUN ln -s /usr/sbin/nginx /usr/bin/nginx
+RUN ln -sf /usr/bin/nodejs /usr/bin/npm \
+    && npm install -g less \
+    && npm install -g less-plugin-clean-css
+
 USER runbot
 ENV HOME /home/runbot
 ENV ODOO_USER runbot
@@ -43,6 +47,8 @@ RUN mkdir -p /var/log/supervisor
 VOLUME ["/var/log/supervisor", "/home/runbot/.local/share/Odoo/filestore", "/home/runbot/instance/extra_addons/odoo-extra/runbot/static"]
 
 RUN cd /home/runbot/ && git clone -b master --single-branch --depth=1 https://github.com/vauxoo-dev/gist-vauxoo.git
+
+EXPOSE 8069
 EXPOSE 8072
 EXPOSE 8080
 
