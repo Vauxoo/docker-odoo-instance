@@ -8,7 +8,9 @@ RUN mkdir /home/runbot/.ssh
 RUN chown runbot:runbot -R /home/runbot
 ADD files/supervisord.conf /etc/supervisor/conf.d/supervisord.conf
 RUN ln -s /usr/sbin/nginx /usr/bin/nginx
-RUN ln -sf /usr/bin/nodejs /usr/bin/npm \
+
+RUN wget -qO- https://deb.nodesource.com/setup | sudo bash - \
+    && apt-get install nodejs \
     && npm install -g less \
     && npm install -g less-plugin-clean-css
 
