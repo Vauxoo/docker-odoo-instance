@@ -247,6 +247,7 @@ def main():
     call(["chown", "-R", "%s:%s" % (USER_NAME, USER_NAME), "/home/%s"
           % USER_NAME])
     call(["chmod", "ugo+rwx", "/tmp"])
+    call(["service", "nginx", "start"])
     logger.info("All changes made, now will run supervidord")
     call(["/usr/bin/supervisord"])
 
