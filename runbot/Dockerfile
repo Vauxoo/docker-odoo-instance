@@ -30,7 +30,9 @@ RUN cd /home/runbot/instance && git clone -b 8.0 https://github.com/odoo/odoo.gi
 RUN cd /home/runbot/instance/extra_addons \
     && git clone -b 8.0-vauxoo --depth=1 --single-branch https://github.com/Vauxoo/runbot-addons.git \
     && git clone -b 8.0-vauxoo --depth=1 --single-branch https://github.com/Vauxoo/odoo-extra.git \
-    && git clone -b master --depth=1 --single-branch https://github.com/Vauxoo/panama-dv.git
+    && git clone -b master --depth=1 --single-branch https://github.com/Vauxoo/panama-dv.git \
+    && git clone -b master --single-branch --depth=1 https://github.com/vauxoo-dev/gist-vauxoo.git \
+    && git clone -b 8.0 --single-branch --depth=1 git@github.com:Vauxoo/odoo-themes.git
 
 ADD files/odoo_runbot.conf /home/runbot/instance/config/odoo_runbot.conf
 ADD files/supervisord.conf /etc/supervisor/conf.d/supervisord.conf
@@ -47,8 +49,6 @@ ADD files/odoo_runbot.conf /external_files/odoo_runbot.conf
 ADD files/supervisord.conf /external_files/supervisord.conf
 RUN mkdir -p /var/log/supervisor
 VOLUME ["/var/log/supervisor", "/home/runbot/.local/share/Odoo/filestore", "/home/runbot/instance/extra_addons/odoo-extra/runbot/static", "/tmp"]
-
-RUN cd /home/runbot/ && git clone -b master --single-branch --depth=1 https://github.com/vauxoo-dev/gist-vauxoo.git
 
 EXPOSE 8069
 EXPOSE 8072
