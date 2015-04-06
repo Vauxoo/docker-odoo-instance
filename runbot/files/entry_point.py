@@ -219,7 +219,7 @@ def main():
     '''
     logger.info("Entering entry point main function")
     if not path.isfile(CONFIGFILE_PATH):
-        copy2("/external_files/openerp_serverrc", CONFIGFILE_PATH)
+        copy2("/external_files/odoo_runbot.conf", CONFIGFILE_PATH)
 
     if getenv('REDIS_SERVER'):
         getter_func = get_redis_vars
@@ -236,6 +236,7 @@ def main():
         call(["mkdir", "-p", FILESTORE_PATH])
 
     call(["chown", "-R", "%s:%s" % (USER_NAME, USER_NAME), "/home/%s" % USER_NAME])
+    call(["chmod", "ugo+rwx", "/tmp")
     logger.info("All changes made, now will run supervidord")
     call(["/usr/bin/supervisord"])
 
