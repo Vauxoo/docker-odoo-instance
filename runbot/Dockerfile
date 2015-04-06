@@ -18,8 +18,6 @@ RUN wget -qO- https://deb.nodesource.com/setup | sudo bash - \
 USER runbot
 ENV HOME /home/runbot
 ENV ODOO_USER runbot
-ENV ODOO_CONFIG_FILE /home/runbot/instance/config/odoo_runbot.conf
-ADD files/odoo_runbot.conf /home/runbot/instance/config/odoo_runbot.conf
 ENV ODOO_FILESTORE_PATH /home/runbot/.local/share/Odoo/filestore
 RUN ssh-keyscan github.com > /home/runbot/.ssh/known_hosts \
     && ssh-keyscan launchpad.net >> /home/runbot/.ssh/known_hosts \
@@ -36,6 +34,8 @@ RUN cd /home/runbot/instance/extra_addons \
     && git clone -b 8.0 --single-branch --depth=1 git@github.com:Vauxoo/odoo-themes.git
 RUN cd /home/runbot && git clone -b master --single-branch --depth=1 https://github.com/vauxoo-dev/gist-vauxoo.git
 ADD files/supervisord.conf /etc/supervisor/conf.d/supervisord.conf
+ADD files/odoo_runbot.conf /home/runbot/instance/config/odoo_runbot.conf
+ENV ODOO_CONFIG_FILE /home/runbot/instance/config/odoo_runbot.conf
 RUN mkdir -p /home/runbot/.local/share
 ENV XDG_DATA_HOME /home/runbot/.local/share
 ENV PYTHONPATH $PYTHONPATH:/home/runbot/instance/extra_addons/panama-dv
