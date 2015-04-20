@@ -17,21 +17,24 @@ import psycopg2
 import ConfigParser
 
 
-logging.basicConfig(level=logging.DEBUG,
-                    format='%(levelname)s:[%(asctime)s] - %(name)s.%(module)s - %(message)s')
+logging.basicConfig(
+    level=logging.DEBUG,
+    format='%(levelname)s:[%(asctime)s] - %(name)s.%(module)s - %(message)s')
 logger = logging.getLogger("entry_point")
 
 USER_NAME = getenv('ODOO_USER') and getenv('ODOO_USER') or 'odoo'
 FILESTORE_PATH = getenv('ODOO_FILESTORE_PATH') \
-                 and getenv('ODOO_FILESTORE_PATH') \
-                 or '/home/%s/.local/share/Odoo/filestore' % USER_NAME
+    and getenv('ODOO_FILESTORE_PATH') \
+    or '/home/%s/.local/share/Odoo/filestore' % USER_NAME
 CONFIGFILE_PATH = getenv('ODOO_CONFIG_FILE') \
-                  and getenv('ODOO_CONFIG_FILE') \
-                  or '/home/%s/.openerp_serverrc' % USER_NAME
+    and getenv('ODOO_CONFIG_FILE') \
+    or '/home/%s/.openerp_serverrc' % USER_NAME
+
 
 def change_values(file_name, getter_func):
     '''
-    Changes value from a config file, new values are gotten from redis server or env vars
+    Changes value from a config file, new values are gotten
+    from redis server or env vars
 
     :param str file_name: Config file name
     :getter_func: Fucnttion that will be used for getting new values
@@ -83,10 +86,12 @@ def get_redis_vars(var_name):
     try:
         res = r_server.hget(key, var_name)
     except redis.exceptions.ConnectionError as res_error:
-        logger.exception("Error trying to read from redis server: %s", res_error)
+        logger.exception("Error trying to read from redis server: %s",
+                         res_error)
         exc_type, exc_value, exc_traceback = sys.exc_info()
         traceback.print_tb(exc_traceback, limit=1, file=sys.stdout)
     return res
+
 
 def delete_build_wo_logs(builds_path):
     ''' Delete static build files
@@ -96,14 +101,14 @@ def delete_build_wo_logs(builds_path):
     if path.exists(builds_path):
         for build_path in listdir(builds_path):
             if path.isdir(build_path):
-              for item in listdir(build_path):
-                path_item = path.join(build_path, item)
-                #import pdb;pdb.set_trace()
-                if path.isdir( path_item ):
-                    if item != 'logs':
-                        rmtree( path_item )
-                    elif path.isfile( path_item ):
-                        remove( path_item )
+                for item in listdir(build_path):
+                    path_item = path.join(build_path, item)
+                    if path.isdir(path_item):
+                        if item != 'logs':
+                            rmtree(path_item)
+                        elif path.isfile(path_item):
+                            remove(path_item)
+
 
 def run_sql(sql, db_config):
     ''' Runs a SQL statement in the specified database
@@ -153,6 +158,7 @@ def run_sql(sql, db_config):
         conn.close()
     return res
 
+
 def clean_runbotbds(db_config):
     ''' This method clean an existing runbot database:
             1 - Drops builds databases
@@ -173,7 +179,7 @@ def clean_runbotbds(db_config):
                "WHERE pg_catalog.pg_get_userbyid(d.datdba) = '%s' " % \
                db_config.get('db_user')
     drop_dbs = drop_dbs + \
-               "AND (datname like '%-base' OR datname like '%-all')"
+        "AND (datname like '%-base' OR datname like '%-all')"
     update_state = "UPDATE runbot_build SET state='done'"
     kill_connections = "select datid, state_change, now()-state_change " + \
                        "AS ago, pg_terminate_backend(pid) " + \
@@ -193,6 +199,7 @@ def clean_runbotbds(db_config):
 
     logger.info('Kill connections')
     run_sql(kill_connections, db_config)
+
 
 def read_db_config(config_file):
     ''' Reads the db config from Odoo config file to use it in case
@@ -219,7 +226,7 @@ def main():
     '''
     logger.info("Entering entry point main function")
     if not path.isfile(CONFIGFILE_PATH):
-        copy2("/external_files/openerp_serverrc", CONFIGFILE_PATH)
+        copy2("/external_files/odoo_runbot.conf", CONFIGFILE_PATH)
 
     if getenv('REDIS_SERVER'):
         getter_func = get_redis_vars
@@ -231,11 +238,16 @@ def main():
     change_values(CONFIGFILE_PATH, getter_func)
     bd_config = read_db_config(CONFIGFILE_PATH)
     clean_runbotbds(bd_config)
-    delete_build_wo_logs('/home/%s/instance/extra_addons/odoo-extra/runbot/static/build' % USER_NAME)
+    delete_build_wo_logs(
+        '/home/%s/instance/extra_addons/odoo-extra/runbot/static/build'
+        % USER_NAME)
     if not path.isfile(FILESTORE_PATH):
         call(["mkdir", "-p", FILESTORE_PATH])
 
-    call(["chown", "-R", "%s:%s" % (USER_NAME, USER_NAME), "/home/%s" % USER_NAME])
+    call(["chown", "-R", "%s:%s" % (USER_NAME, USER_NAME), "/home/%s"
+          % USER_NAME])
+    call(["chmod", "ugo+rwx", "/tmp"])
+    call(["service", "nginx", "start"])
     logger.info("All changes made, now will run supervidord")
     call(["/usr/bin/supervisord"])
 

@@ -32,16 +32,18 @@
       sudo: yes
 
     - name: Start a new runbot conatiner
-      docker: 
+      docker:
         image: "{{ runbot_image_name }}"
         name: "{{ runbot_name }}"
-        command: "/entry_point.py" 
+        command: "/entry_point.py"
         hostname: "{{ runbot_hostname }}"
-        ports: 
-          - "{{ odoo_mapped_port }}:8072"
+        ports:
+          - "{{ odoo_mapped_port }}:8069"
+          - "{{ odoo_mapped_port_lp }}:8069"
           - "{{ nginx_mapped_port }}:8080"
-        env: "DB_HOST={{ db_server }},DBFILTER={{ db_filter }},DB_NAME={{ db_name }},WITHOUT_DEMO=False,ODOO_CONFIG_FILE={{ odoo_config_file }}"
+        env: "DB_HOST={{ db_server }},DBFILTER={{ db_filter }},DB_NAME={{ db_name }},WITHOUT_DEMO=False,ODOO_CONFIG_FILE={{ odoo_config_file }},DB_USER={{ db_user }},DB_PASSWORD={{ db_password }}"
         volumes:
-          - "/home/runbot/.ssh:/home/runbot/.ssh" 
-          - "/home/runbot/logs:/var/log/supervisor" 
-          - "/home/runbot/static:/home/runbot/instance/extra_addons/odoo-extra/runbot/static"
+          - "{{ working_folder }}/ssh:/home/runbot/.ssh"
+          - "{{ working_folder }}/logs:/var/log/supervisor"
+          - "{{ working_folder }}/static:/home/runbot/instance/extra_addons/odoo-extra/runbot/static"
+          - "{{ working_folder }}/tmp:/tmp"
