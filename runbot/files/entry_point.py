@@ -179,7 +179,8 @@ def clean_runbotbds(db_config):
                "WHERE pg_catalog.pg_get_userbyid(d.datdba) = '%s' " % \
                db_config.get('db_user')
     drop_dbs = drop_dbs + \
-        "AND (datname like '%-base' OR datname like '%-all')"
+        "AND (datname like '%-base' OR datname like '%-all' " + \
+        "OR datname like '%-wodemo')"
     update_state = "UPDATE runbot_build SET state='done'"
     kill_connections = "select datid, state_change, now()-state_change " + \
                        "AS ago, pg_terminate_backend(pid) " + \
