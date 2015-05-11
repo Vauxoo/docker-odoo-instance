@@ -15,7 +15,7 @@ import sys
 import traceback
 import psycopg2
 import ConfigParser
-
+import re
 
 logging.basicConfig(
     level=logging.DEBUG,
@@ -176,6 +176,20 @@ def clean_runbotbds(db_config):
     :param dict db_config: Database connection parameters
     '''
     drop_dbs = "SELECT datname FROM pg_catalog.pg_database d " + \
+           "WHERE pg_catalog.pg_get_userbyid(d.datdba) = '%s' AND datname = '%s'" % \
+           (db_config.get('db_user'), db_config.get('db_name'))
+
+    try:
+        logger.debug('Check if database exist')
+        run_sql(drop_dbs, db_config)
+    except psycopg2.OperationalError as e:
+        reg = re.compile(r'database "\w+" does not exist')
+        if reg.search(e.message):
+            logger.warning('Database %s does not exists', db_config.get('db_name'))
+            logger.warning('If this is your intention ognore this message, else check configuration')
+            return
+
+    drop_dbs = "SELECT datname FROM pg_catalog.pg_database d " + \
                "WHERE pg_catalog.pg_get_userbyid(d.datdba) = '%s' " % \
                db_config.get('db_user')
     drop_dbs = drop_dbs + \
@@ -244,6 +258,13 @@ def main():
         % USER_NAME)
     if not path.isfile(FILESTORE_PATH):
         call(["mkdir", "-p", FILESTORE_PATH])
+
+    nginx_pid = '/home/%s/instance/extra_addons/odoo-extra/runbot/static/nginx/nginx.pid'
+        % USER_NAME
+    logger.debug('Check if %s file exist', nginx_pid)
+    if path.isfile(nginx_pid):
+        logger.info('Removing nginx pid file')
+        remove(nginx_pid)
 
     call(["chown", "-R", "%s:%s" % (USER_NAME, USER_NAME), "/home/%s"
           % USER_NAME])
