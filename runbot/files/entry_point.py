@@ -258,6 +258,13 @@ def main():
     if not path.isfile(FILESTORE_PATH):
         call(["mkdir", "-p", FILESTORE_PATH])
 
+    nginx_pid = '/home/%s/instance/extra_addons/odoo-extra/runbot/static/nginx/nginx.pid'
+        % USER_NAME
+    logger.debug('Check if %s file exist', nginx_pid)
+    if path.isfile(nginx_pid):
+        logger.info('Removing nginx pid file')
+        remove(nginx_pid)
+
     call(["chown", "-R", "%s:%s" % (USER_NAME, USER_NAME), "/home/%s"
           % USER_NAME])
     call(["chmod", "ugo+rwx", "/tmp"])
