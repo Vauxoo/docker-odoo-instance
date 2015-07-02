@@ -31,7 +31,8 @@ RUN cd /home/runbot/instance/extra_addons \
     && git clone -b 8.0-vauxoo --depth=1 --single-branch https://github.com/Vauxoo/runbot-addons.git \
     && git clone -b 8.0-vauxoo --depth=1 --single-branch https://github.com/Vauxoo/odoo-extra.git \
     && git clone -b master --depth=1 --single-branch https://github.com/Vauxoo/panama-dv.git \
-    && git clone -b 8.0 --single-branch --depth=1 git@github.com:Vauxoo/odoo-themes.git
+    && git clone -b 8.0 --single-branch --depth=1 git@github.com:Vauxoo/odoo-themes.git \
+    && git clone -b 8.0 --single-branch --depth=1 git@github.com:Vauxoo/server-tools.git
 RUN cd /home/runbot && git clone -b master --single-branch --depth=1 https://github.com/vauxoo-dev/gist-vauxoo.git
 ADD files/supervisord.conf /etc/supervisor/conf.d/supervisord.conf
 ADD files/odoo_runbot.conf /home/runbot/instance/config/odoo_runbot.conf
