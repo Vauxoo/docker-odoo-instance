@@ -28,7 +28,6 @@ RUN cd /home/odoo/instance/extra_addons \
     && git clone -b 8.0 --single-branch --depth=1 https://github.com/Vauxoo/addons-vauxoo.git \
     && git clone -b 8.0 --single-branch --depth=1 https://github.com/OCA/web.git oca_web
 ## Remove the key file you added before
-RUN rm /home/odoo/.ssh/id_rsa
 RUN mkdir -p /home/odoo/.local/share
 ENV XDG_DATA_HOME /home/odoo/.local/share
 ADD files/openerp_serverrc /home/odoo/.openerp_serverrc
