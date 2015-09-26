@@ -1,0 +1,13 @@
+runbot_image_name: runbot
+runbot_image_tag: 90
+runbot_container_name: "{{ runbot_image_name }}_{{ runbot_image_tag }}"
+runbot_hostname: runbot.vauxoo.com
+dockerfile_path: ../
+
+so_user: "{{ lookup('env','USER') }}"
+
+home_dir: "{{ lookup('env','HOME') }}"
+working_folder: "{{home_dir}}/runbot/data_folder"
+runbot_db: dbrunbot
+psql_image: postgres:9.5
+psql_password: runbot
