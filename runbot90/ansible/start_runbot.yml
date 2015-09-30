@@ -52,7 +52,7 @@
         recurse: yes
       sudo: yes
 
-    - name: Start a new postgres container
+    - name: Start a new postgres container, if show permission error execute "chown -R postgres:postgres /var/lib/postgresql"
       docker:
         image: "{{ psql_image }}"
         name: "{{ runbot_db }}"
@@ -70,7 +70,7 @@
         path: "{{ dockerfile_path }}"
         state: build
 
-    - name: Start a new runbot container
+    - name: Start a new runbot container, if show sudo error execute
       docker:
         image: "{{ runbot_image_name }}:{{ runbot_image_tag }}"
         name: "{{ runbot_container_name }}"
