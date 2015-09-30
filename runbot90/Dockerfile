@@ -12,7 +12,6 @@ RUN mkdir -p /home/runbot/instance/config \
     && mkdir -p /home/runbot/.ssh \
     && mkdir -p /home/runbot/.local/share/Odoo/filestore \
     && mkdir -p /var/log/supervisor
-ADD files/id_rsa /home/runbot/.ssh/id_rsa
 ADD files/odoo_runbot.conf /home/runbot/instance/config/odoo_runbot.conf
 ADD files/entrypoint.sh /entrypoint.sh
 ADD files/db_source /home/runbot/.db_source
@@ -57,11 +56,9 @@ RUN git config --global user.email "runbot@vauxoo.com" && \
     git config --global user.name "Runbot Vauxoo"
 
 # Clone all repo depends
-RUN git clone -b 9.0 git@github.com:odoo/odoo.git ${HOME}/instance/odoo \
-    && git clone -b 8.0 git@github.com:OCA/runbot-addons.git ${EXTRA_ADDONS}/runbot-addons \
-    && git clone -b master git@github.com:odoo/odoo-extra.git ${EXTRA_ADDONS}/odoo-extra \
-    && git clone -b 8.0 git@github.com:Vauxoo/odoo-themes.git ${EXTRA_ADDONS}/odoo-themes \
-    && git clone -b 8.0 git@github.com:Vauxoo/server-tools.git ${EXTRA_ADDONS}/server-tools
+RUN git clone -b 9.0 https://github.com/odoo/odoo.git ${HOME}/instance/odoo \
+    && git clone -b 8.0 https://github.com/OCA/runbot-addons.git ${EXTRA_ADDONS}/runbot-addons \
+    && git clone -b master https://github.com/odoo/odoo-extra.git ${EXTRA_ADDONS}/odoo-extra
 
 # Apply patches
 #   Patch 8.0 -> 9.0
@@ -77,14 +74,12 @@ RUN usermod -aG docker runbot
 RUN curl http://j.mp/spf13-vim3 -L -o - | sh
 
 # Docker configuration
-VOLUME ["/home/runbot/.local/share/Odoo/filestore", "/home/runbot/instance/extra_addons/odoo-extra/runbot/static", "/var/log/supervisor", "/var/lib/docker"]
+VOLUME ["/home/runbot/.local/share/Odoo/filestore", "/home/runbot/instance/extra_addons/odoo-extra/runbot/static", "/var/log/supervisor", "/var/lib/docker", "/home/runbot/.ssh"]
 
 # Docker port
 EXPOSE 2376
 
 # Odoo instance
-EXPOSE 8069
-EXPOSE 8072
-EXPOSE 8080
+EXPOSE 8069 8072 8080 80
 
 CMD /entrypoint.sh

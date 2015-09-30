@@ -3,6 +3,18 @@
     - vars.yml
 
   tasks:
+    - name: Check ssh folder permissions
+      file:
+        path: "{{ working_folder }}/ssh"
+        state: directory
+        group: "{{ so_user }}"
+        owner: "{{ so_user }}"
+        recurse: yes
+      sudo: yes
+
+
+    - name: Copy ssh file
+      copy: src="{{ ssh_private_key }}" dest="{{ working_folder }}/ssh/id_rsa" group="{{ so_user }}" owner="{{ so_user }}" mode=0600
 
     - name: Check logs folder permissions
       file:
@@ -70,6 +82,7 @@
           - "{{ working_folder }}/static:/home/runbot/instance/extra_addons/odoo-extra/runbot/static"
           - "{{ working_folder }}/logs:/var/log/supervisor"
           - "{{ working_folder }}/docker:/var/lib/docker"
+          - "{{ working_folder }}/ssh:/home/runbot/.ssh"
         links:
           - "{{ runbot_db }}:dbrunbot"
 

@@ -7,7 +7,8 @@ dockerfile_path: ../
 so_user: "{{ lookup('env','USER') }}"
 
 home_dir: "{{ lookup('env','HOME') }}"
-working_folder: "{{home_dir}}/runbot/data_folder"
+working_folder: "{{ home_dir }}/runbot/data_folder"
+ssh_private_key: "{{ home_dir }}/.ssh/id_rsa"
 runbot_db: dbrunbot
 psql_image: postgres:9.5
 psql_password: runbot
