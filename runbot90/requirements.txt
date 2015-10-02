@@ -1,0 +1,4 @@
+docker-py==1.4.0
+travis2docker==1.1.1
+ansible==1.9.3
+# Install docker-1.8.2 bin app too

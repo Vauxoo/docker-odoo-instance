@@ -1,0 +1,61 @@
+- hosts: local
+  vars_files:
+    - vars.yml
+
+  tasks:
+    - name: Check ssh folder permissions
+      file:
+        path: "{{ working_folder }}/ssh"
+        state: directory
+        group: "{{ so_user }}"
+        owner: "{{ so_user }}"
+        recurse: yes
+      sudo: yes
+
+
+    - name: Copy ssh file
+      copy: src="{{ ssh_private_key }}" dest="{{ working_folder }}/ssh/id_rsa" group="{{ so_user }}" owner="{{ so_user }}" mode=0600
+
+    - name: Check global working folder permissions
+      file:
+        path: "{{ working_folder }}"
+        state: directory
+        group: "{{ so_user }}"
+        owner: "{{ so_user }}"
+        recurse: yes
+      sudo: yes
+
+    - name: Start a new postgres container, if show permission error execute "chown -R postgres:postgres /var/lib/postgresql"
+      docker:
+        image: "{{ psql_image }}"
+        name: "{{ runbot_db }}"
+        env: "POSTGRES_USER=runbot,POSTGRES_PASSWORD={{ psql_password }}"
+        volumes:
+          - "{{ working_folder }}/psql_data:/var/lib/postgresql/data"
+        pull: "missing"
+        publish_all_ports: yes
+
+    - name: Build runbot image
+      docker_image:
+        name: "{{ runbot_image_name }}"
+        nocache: no
+        tag: "{{ runbot_image_tag }}"
+        path: "{{ dockerfile_path }}"
+        state: build
+
+    - name: Start a new runbot container, if show sudo error execute
+      docker:
+        image: "{{ runbot_image_name }}:{{ runbot_image_tag }}"
+        name: "{{ runbot_container_name }}"
+        command: "/entrypoint.sh"
+        hostname: "{{ runbot_hostname }}"
+        publish_all_ports: yes
+        privileged: yes
+        volumes:
+          - "{{ working_folder }}/static:/home/runbot/instance/extra_addons/odoo-extra/runbot/static"
+          - "{{ working_folder }}/logs:/var/log/supervisor"
+          - "{{ working_folder }}/docker:/var/lib/docker"
+          - "{{ working_folder }}/ssh:/home/runbot/.ssh"
+        links:
+          - "{{ runbot_db }}:dbrunbot"
+
