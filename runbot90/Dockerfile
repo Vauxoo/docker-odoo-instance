@@ -16,7 +16,6 @@ ADD files/odoo_runbot.conf /home/runbot/instance/config/odoo_runbot.conf
 ADD files/entrypoint.sh /entrypoint.sh
 ADD files/db_source /home/runbot/.db_source
 ADD files/supervisord.conf /etc/supervisor/conf.d/supervisord.conf
-ADD files/patches /home/runbot/instance/patches
 RUN chown runbot:runbot -R /home/runbot \
     && chown runbot:runbot /entrypoint.sh
 
@@ -63,8 +62,6 @@ RUN git clone -b 9.0 https://github.com/odoo/odoo.git ${HOME}/instance/odoo \
 # Apply patches
 #   Patch 8.0 -> 9.0
 RUN find ${EXTRA_ADDONS}/odoo-extra/runbot -name res_config_view.xml -exec sed -i 's/base.menu_config/base.menu_administration/g' {} \;
-RUN git apply /home/runbot/instance/patches/* \
-    --directory /home/runbot/instance/extra_addons/odoo-extra/runbot;
 
 # Finish with root
 USER root
