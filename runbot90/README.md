@@ -31,15 +31,15 @@ To use this container, you need to:
    * runbot container has a link to postgres container.
 * Attach to runbot container
  * `$: docker exec -it runbot90 bash`
-* Restart odoo server executing (into container):
+* (into container) Restart odoo server executing
   * `# supervisorctl stop odoo`
-  * `$: su runbot`
+  * `#: su runbot`
   * `$: source /home/runbot/.db_source`
   * `$: /home/runbot/instance/odoo/odoo.py --config=/home/runbot/instance/config/odoo_runbot.conf`
-* Connect to odoo instance (out of container, in main computer)
+* (out of container, in main computer) Connect to odoo instance
   * Get port published of runbot docker
     * `$ docker port runbot_90 | grep 8069`
       * ouput of example: `8069/tcp -> 0.0.0.0:33177`
   * Open browser:
     * `http://127.0.0.1:33177`
-    * Note: If you use boot2docker, remote docker server or docker-machine you will need get the ip and publish the port from firewall.
+    * Note: If you use boot2docker, remote docker server or docker-machine you will need get the ip and publish the port from firewall or you can use ngrok too.
