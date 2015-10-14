@@ -22,9 +22,8 @@ RUN chown runbot:runbot -R /home/runbot \
 RUN apt-get update && apt-get install nginx \
     && ln -s /usr/sbin/nginx /usr/bin/nginx
 
-# Extra depends: panama-dv for modules vauxoo, t2d for runbot, pyopenssl for security warning
-RUN pip install --upgrade git+https://github.com/Vauxoo/panama-dv.git \
-    && pip install --upgrade git+https://github.com/vauxoo/travis2docker.git \
+# Extra depends: t2d for runbot, pyopenssl for security warning
+RUN pip install --upgrade git+https://github.com/vauxoo/travis2docker.git \
     && pip install --upgrade pyopenssl ndg-httpsclient pyasn1
 
 # Install docker in docker
@@ -55,9 +54,9 @@ RUN git config --global user.email "runbot@vauxoo.com" && \
     git config --global user.name "Runbot Vauxoo"
 
 # Clone all repo depends
-RUN git clone -b 9.0 https://github.com/odoo/odoo.git ${HOME}/instance/odoo \
-    && git clone -b 8.0 https://github.com/OCA/runbot-addons.git ${EXTRA_ADDONS}/runbot-addons \
-    && git clone -b master https://github.com/odoo/odoo-extra.git ${EXTRA_ADDONS}/odoo-extra
+RUN git clone --single-branch --depth=1 -b 9.0 https://github.com/odoo/odoo.git ${HOME}/instance/odoo \
+    && git clone --single-branch --depth=1 -b 8.0 https://github.com/Vauxoo/runbot-addons.git ${EXTRA_ADDONS}/runbot-addons \
+    && git clone --single-branch --depth=1 -b master https://github.com/odoo/odoo-extra.git ${EXTRA_ADDONS}/odoo-extra
 
 # Apply patches
 #   Patch 8.0 -> 9.0
