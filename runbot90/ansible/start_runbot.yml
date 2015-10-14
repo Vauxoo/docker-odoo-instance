@@ -10,7 +10,7 @@
         group: "{{ so_user }}"
         owner: "{{ so_user }}"
         recurse: yes
-      sudo: yes
+      sudo: false
 
 
     - name: Copy ssh file
@@ -23,7 +23,7 @@
         group: "{{ so_user }}"
         owner: "{{ so_user }}"
         recurse: yes
-      sudo: yes
+      sudo: false
 
     - name: Start a new postgres container, if show permission error execute "chown -R postgres:postgres /var/lib/postgresql"
       docker:
