@@ -55,12 +55,13 @@ RUN git config --global user.email "runbot@vauxoo.com" && \
 
 # Clone all repo depends
 RUN git clone --single-branch --depth=1 -b 9.0 https://github.com/odoo/odoo.git ${HOME}/instance/odoo \
-    && git clone --single-branch --depth=1 -b 8.0 https://github.com/Vauxoo/runbot-addons.git ${EXTRA_ADDONS}/runbot-addons \
+    && git clone --single-branch --depth=1 -b 9.0 https://github.com/Vauxoo/runbot-addons.git ${EXTRA_ADDONS}/runbot-addons \
     && git clone --single-branch --depth=1 -b master https://github.com/odoo/odoo-extra.git ${EXTRA_ADDONS}/odoo-extra
 
 # Apply patches
 #   Patch 8.0 -> 9.0
-RUN find ${EXTRA_ADDONS}/odoo-extra/runbot -name res_config_view.xml -exec sed -i 's/base.menu_config/base.menu_administration/g' {} \;
+RUN find ${EXTRA_ADDONS}/odoo-extra/runbot -name res_config_view.xml -exec sed -i 's/base.menu_config/base.menu_administration/g' {} \; \
+    && find ${EXTRA_ADDONS}/odoo-extra/runbot -name runbot.py -exec sed -i "s/methods=\['POST'\])/methods=\['POST'\], csrf=False)/g" {} \;
 
 # Finish with root
 USER root
